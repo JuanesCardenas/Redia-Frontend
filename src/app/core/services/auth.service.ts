@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
+import { AuthResponse } from '../../models/auth.model'
 
 @Injectable({
     providedIn: 'root'
@@ -15,21 +16,36 @@ export class AuthService {
     register(data: {
         nombre: string
         email: string
+        telefono: string
         password: string
         role: string
+        fotoUrl?: File
     }): Observable<any> {
 
-        return this.http.post(`${this.apiUrl}/register`, data)
+        const formData = new FormData()
 
+        formData.append('nombre', data.nombre)
+        formData.append('email', data.email)
+        formData.append('telefono', data.telefono)
+        formData.append('password', data.password)
+        formData.append('role', data.role)
+
+        if (data.fotoUrl) {
+            formData.append('fotoUrl', data.fotoUrl)
+        }
+
+        return this.http.post(`${this.apiUrl}/register`, formData, {
+            responseType: 'text'
+        })
     }
 
     // Iniciar sesión
     login(data: {
         email: string
         password: string
-    }): Observable<any> {
+    }): Observable<AuthResponse> {
 
-        return this.http.post(`${this.apiUrl}/login`, data)
+        return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data)
 
     }
 

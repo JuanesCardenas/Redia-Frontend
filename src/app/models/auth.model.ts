@@ -6,8 +6,10 @@ export interface LoginRequest {
 export interface RegisterRequest {
     nombre: string
     email: string
+    telefono: string
     password: string
     role: string
+    fotoUrl?: File
 }
 
 export interface AuthResponse {
@@ -15,6 +17,9 @@ export interface AuthResponse {
     refreshToken: string
     email: string
     role: string
+    nombre: string
+    telefono: string
+    fotoUrl?: string
 }
 
 export interface RefreshTokenRequest {

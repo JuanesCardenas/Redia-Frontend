@@ -13,18 +13,60 @@
     </div>
 
     <div class="form-group">
+      <label for="fotoInput"
+        style="font-size: 0.9rem; color: #666; display: block; margin-bottom: 5px; text-align: left;">Foto de perfil
+        (opcional)</label>
+      <input type="file" id="fotoInput" (change)="onFileSelected($event)" accept="image/*" />
+    </div>
+
+    <div class="form-group">
       <input type="email" placeholder="Correo electrónico" [(ngModel)]="email" name="email" required
         autocomplete="email" />
     </div>
 
     <div class="form-group">
-      <input type="password" placeholder="Contraseña" [(ngModel)]="password" name="password" required
-        autocomplete="new-password" />
+      <input type="tel" placeholder="Teléfono" [(ngModel)]="telefono" name="telefono" required autocomplete="tel" />
     </div>
 
-    <div class="form-group">
-      <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword" name="confirmPassword"
-        required autocomplete="new-password" />
+    <div class="form-group password-group" style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
+      <input [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" [(ngModel)]="password" name="password"
+        required autocomplete="new-password" style="margin: 0; flex: 1;" />
+      <span class="toggle-password-icon" (click)="togglePasswordVisibility()" title="Mostrar/Ocultar contraseña"
+        style="cursor: pointer; display: flex; align-items: center; color: var(--ion-color-primary);">
+        <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+          </path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        </svg>
+      </span>
+    </div>
+
+    <div class="form-group password-group" style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
+      <input [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirmar contraseña"
+        [(ngModel)]="confirmPassword" name="confirmPassword" required autocomplete="new-password"
+        style="margin: 0; flex: 1;" />
+      <span class="toggle-password-icon" (click)="toggleConfirmPasswordVisibility()" title="Mostrar/Ocultar contraseña"
+        style="cursor: pointer; display: flex; align-items: center; color: var(--ion-color-primary);">
+        <svg *ngIf="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <svg *ngIf="showConfirmPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+          </path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        </svg>
+      </span>
     </div>
 
     <div *ngIf="passwordError" style="color: red; font-size: 0.9rem; margin-bottom: 15px; text-align: center;">

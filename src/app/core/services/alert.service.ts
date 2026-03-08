@@ -17,7 +17,7 @@ export class AlertService {
       position: "right", // `left`, `center` or `right`
       stopOnFocus: true, // Prevents dismissing of toast on hover
       style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)",
+        background: "#00b09b",
       }
     }).showToast();
   }
@@ -30,7 +30,7 @@ export class AlertService {
       position: "right",
       stopOnFocus: true,
       style: {
-        background: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        background: "#ff5f6d",
       }
     }).showToast();
   }
@@ -43,7 +43,7 @@ export class AlertService {
       position: "right",
       stopOnFocus: true,
       style: {
-        background: "linear-gradient(to right, #f093fb, #f5576c)",
+        background: "#f093fb",
       }
     }).showToast();
   }
@@ -56,7 +56,7 @@ export class AlertService {
       position: "right",
       stopOnFocus: true,
       style: {
-        background: "linear-gradient(to right, #4facfe, #00f2fe)",
+        background: "#4facfe",
       }
     }).showToast();
   }

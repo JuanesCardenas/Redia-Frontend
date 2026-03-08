@@ -19,16 +19,32 @@ export class RegisterComponent {
 
     nombre = ''
     email = ''
+    telefono = ''
     password = ''
     confirmPassword = ''
+    showPassword = false
+    showConfirmPassword = false
     passwordError = ''
-    role = 'CLIENTE' // Siempre será cliente
+    role = 'CLIENTE'
+    foto?: File
 
     constructor(
         private authService: AuthService,
         private router: Router,
         private alertService: AlertService
     ) { }
+
+    togglePasswordVisibility() {
+        this.showPassword = !this.showPassword;
+    }
+
+    toggleConfirmPasswordVisibility() {
+        this.showConfirmPassword = !this.showConfirmPassword;
+    }
+
+    onFileSelected(event: any) {
+        this.foto = event.target.files[0]
+    }
 
     register() {
         this.passwordError = '';
@@ -41,35 +57,26 @@ export class RegisterComponent {
         const data = {
             nombre: this.nombre,
             email: this.email,
+            telefono: this.telefono,
             password: this.password,
-            role: 'CLIENTE' // Siempre CLIENTE
+            role: this.role,
+            fotoUrl: this.foto
         }
 
         this.authService.register(data).subscribe({
 
             next: () => {
-                // Auto login after successful registration
-                this.authService.login({
-                    email: this.email,
-                    password: this.password
-                }).subscribe({
-                    next: (res: any) => {
-                        localStorage.setItem('accessToken', res.token)
-                        localStorage.setItem('refreshToken', res.refreshToken)
-                        localStorage.setItem('role', res.role)
-                        this.router.navigate(['/dashboard'])
-                    },
-                    error: err => {
-                        this.alertService.error('User registered but login failed. Please login manually.')
-                        this.router.navigate(['/login'])
-                        console.error(err)
-                    }
-                })
+                this.alertService.success('¡Usuario registrado exitosamente!')
+                this.router.navigate(['/login'])
             },
 
             error: err => {
-                this.alertService.error('Registration error')
-                console.error(err)
+                console.error('Registration Error:', err)
+                if (err.name === 'HttpErrorResponse' && err.status === 0) {
+                    this.alertService.error('Error de red. Asegúrate de que el servidor (Redia-Backend) esté encendido.')
+                } else {
+                    this.alertService.error('Hubo un error al registrar el usuario.')
+                }
             }
 
         })

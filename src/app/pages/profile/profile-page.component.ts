@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -12,18 +12,28 @@ import { FooterComponent } from '../../shared/footer/footer.component';
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.css',
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
   editMode = false;
   passwordMode = false;
 
   user = {
-    nombre: 'María García',
-    email: 'maria@email.com',
-    telefono: '+57 320 555 6666',
-    rol: 'cliente'
+    nombre: '',
+    email: '',
+    telefono: '',
+    rol: '',
+    fotoUrl: ''
   };
 
   editUser = { ...this.user };
+
+  ngOnInit() {
+    this.user.nombre = localStorage.getItem('nombre') || '';
+    this.user.email = localStorage.getItem('email') || '';
+    this.user.telefono = localStorage.getItem('telefono') || '';
+    this.user.rol = localStorage.getItem('role') || 'CLIENTE';
+    this.user.fotoUrl = localStorage.getItem('fotoUrl') || '';
+    this.editUser = { ...this.user };
+  }
 
   passwords = { actual: '', nueva: '', confirmar: '' };
 
