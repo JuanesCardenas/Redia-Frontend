@@ -45,7 +45,7 @@
                     <label>📌 Estado</label>
                     <select class="filter-input" [(ngModel)]="filtroEstado" (ngModelChange)="applyFilters()">
                         <option value="">Todos</option>
-                        <option value="pendiente">Pendiente</option>
+                        <option value="solicitada">Solicitada</option>
                         <option value="confirmada">Confirmada</option>
                         <option value="rechazada">Rechazada</option>
                         <option value="cancelada">Cancelada</option>
@@ -54,8 +54,8 @@
                 </div>
 
                 <div class="filter-group">
-                    <label>🔍 Email Cliente</label>
-                    <input type="text" class="filter-input" placeholder="Buscar por email..."
+                    <label>🔍 Cliente</label>
+                    <input type="text" class="filter-input" placeholder="Buscar por nombre o email..."
                         [(ngModel)]="filtroCliente" (ngModelChange)="applyFilters()" />
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Email Cliente</th>
+                        <th>Cliente</th>
                         <th>Fecha</th>
                         <th>Hora entrada</th>
                         <th>Hora salida</th>
@@ -90,7 +90,16 @@
                 <tbody>
                     <tr *ngFor="let r of reservations">
                         <td class="id-cell" title="{{ r.id }}">...{{ r.id.substring(r.id.length - 6) }}</td>
-                        <td>{{ r.clienteEmail }}</td>
+                        <td>
+                            <div class="user-name-cell">
+                                <div class="user-avatar">{{ (r.clienteNombre ||
+                                    r.clienteEmail)?.charAt(0)?.toUpperCase() }}</div>
+                                <div>
+                                    <div *ngIf="r.clienteNombre" style="font-weight:600;">{{ r.clienteNombre }}</div>
+                                    <div style="font-size:0.8rem;opacity:0.7;">{{ r.clienteEmail }}</div>
+                                </div>
+                            </div>
+                        </td>
                         <td class="meta-cell">{{ r.fechaReserva | date:'dd/MM/yyyy' }}</td>
                         <td><strong>{{ r.fechaReserva | date:'HH:mm' }}</strong></td>
                         <td class="meta-cell">{{ r.horaFinReserva | date:'HH:mm' }}</td>

@@ -49,7 +49,7 @@ export class ReservationService {
         );
     }
 
-    confirmReservation(id: string, tablesReq: { idsMesas: string[] }): Observable<any> {
+    confirmReservation(id: string, tablesReq: { mesasIds: string[] }): Observable<any> {
         return this.http.put(`${this.apiUrl}/confirm-with-tables/${id}`, tablesReq, { responseType: 'text' });
     }
 
@@ -63,5 +63,10 @@ export class ReservationService {
 
     finishReservation(id: string): Observable<any> {
         return this.http.put(`${this.apiUrl}/finish/${id}`, {}, { responseType: 'text' });
+    }
+
+    /** Returns all tables - accessible by recepcionista via /api/reservations/tables */
+    getTablesForReservations(): Observable<{ id: string; nombre: string; capacidad: number }[]> {
+        return this.http.get<{ id: string; nombre: string; capacidad: number }[]>(`${this.apiUrl}/tables`);
     }
 }

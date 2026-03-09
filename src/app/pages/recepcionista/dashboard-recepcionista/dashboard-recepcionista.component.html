@@ -8,7 +8,8 @@
                 <h1 class="page-title">📋 Dashboard</h1>
                 <p class="page-subtitle">Resumen del día — {{ today | date:'EEEE, d MMMM yyyy':'':'es' }}</p>
             </div>
-            <a routerLink="/recepcionista/reservations" class="btn-primary" style="text-decoration:none;">
+            <a routerLink="/recepcionista/reservations" class="btn-primary"
+                style="text-decoration:none; background: white; color: var(--ion-color-secondary); border: none; font-weight: bold;">
                 Ver todas las reservas →
             </a>
         </div>
@@ -16,94 +17,102 @@
 
     <div class="page-content">
 
-        <!-- Summary Cards -->
-        <div class="stats-grid four-cols">
-            <div class="stat-card accent">
-                <div class="stat-icon">📅</div>
-                <div class="stat-info">
-                    <span class="stat-label">Reservas hoy</span>
-                    <span class="stat-value large">{{ reservasTotal }}</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <div class="stat-info">
-                    <span class="stat-label">Confirmadas</span>
-                    <span class="stat-value large" style="color:#2e7d32;">{{ reservasConfirmadas }}</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">⏳</div>
-                <div class="stat-info">
-                    <span class="stat-label">Pendientes</span>
-                    <span class="stat-value large" style="color:#e65100;">{{ reservasPendientes }}</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🪑</div>
-                <div class="stat-info">
-                    <span class="stat-label">Mesas ocupadas</span>
-                    <span class="stat-value large">{{ mesasOcupadas }}<span
-                            style="font-size:18px;font-weight:400;color:#aaa;">/8</span></span>
-                </div>
-            </div>
+        <!-- Loading -->
+        <div *ngIf="isLoading" style="padding: 2rem; text-align: center; color: var(--ion-color-medium);">
+            Cargando datos del dashboard...
         </div>
 
-        <!-- Mesa Status Grid -->
-        <h2 class="section-title">Estado de Mesas</h2>
-        <div class="mesas-grid">
-            <div *ngFor="let mesa of mesas" class="mesa-card" [class.ocupada]="mesa.ocupada">
-                <span class="mesa-icon">{{ mesa.ocupada ? '🟥' : '🟩' }}</span>
-                <span class="mesa-num">Mesa {{ mesa.id }}</span>
-                <span class="mesa-cap">4 personas</span>
-                <span class="mesa-estado">{{ mesa.ocupada ? 'Ocupada' : 'Disponible' }}</span>
+        <div *ngIf="!isLoading">
+
+            <!-- Summary Cards -->
+            <div class="stats-grid four-cols">
+                <div class="stat-card accent">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Reservas hoy</span>
+                        <span class="stat-value large">{{ reservasTotal }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Confirmadas</span>
+                        <span class="stat-value large" style="color:#2e7d32;">{{ reservasConfirmadas }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Solicitadas</span>
+                        <span class="stat-value large" style="color:#e65100;">{{ reservasSolicitadas }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🪑</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Mesas</span>
+                        <span class="stat-value large">{{ totalMesas }}</span>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Today's Reservations Table -->
-        <h2 class="section-title">Reservas de hoy</h2>
+            <!-- Mesa Status Grid -->
+            <h2 class="section-title">Mesas registradas</h2>
+            <div *ngIf="mesas.length === 0" class="empty-state">
+                <span class="empty-icon">🪑</span>
+                <p>No hay mesas registradas.</p>
+            </div>
+            <div class="mesas-grid" *ngIf="mesas.length > 0">
+                <div *ngFor="let mesa of mesas" class="mesa-card">
+                    <span class="mesa-icon">🪑</span>
+                    <span class="mesa-num">{{ mesa.nombre }}</span>
+                    <span class="mesa-cap">{{ mesa.capacidad }} personas</span>
+                </div>
+            </div>
 
-        <div *ngIf="reservasHoy.length === 0" class="empty-state">
-            <span class="empty-icon">📭</span>
-            <p>No hay reservas programadas para hoy.</p>
-        </div>
+            <!-- Today's Reservations Table -->
+            <h2 class="section-title">Reservas de hoy</h2>
 
-        <div *ngIf="reservasHoy.length > 0" class="table-wrapper">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Hora entrada</th>
-                        <th>Hora salida</th>
-                        <th>Personas</th>
-                        <th>Mesas</th>
-                        <th>Cant. Mesas</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let r of reservasHoy">
-                        <td class="id-cell">{{ r.id }}</td>
-                        <td>
-                            <div class="user-name-cell">
-                                <div class="user-avatar">{{ r.cliente.charAt(0) }}</div>
-                                {{ r.cliente }}
-                            </div>
-                        </td>
-                        <td><strong>{{ r.horaEntrada }}</strong></td>
-                        <td class="meta-cell">{{ r.horaSalida }}</td>
-                        <td>👥 {{ r.personas }}</td>
-                        <td class="meta-cell">
-                            <span *ngFor="let m of r.mesas; let last = last">Mesa {{ m }}{{ !last ? ', ' : '' }}</span>
-                        </td>
-                        <td style="text-align:center;font-weight:700;">{{ r.cantMesas }}</td>
-                        <td>
-                            <span class="status-badge" [ngClass]="getStatusClass(r.estado)">{{ r.estado }}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div *ngIf="reservasHoy.length === 0" class="empty-state">
+                <span class="empty-icon">📭</span>
+                <p>No hay reservas programadas para hoy.</p>
+            </div>
+
+            <div *ngIf="reservasHoy.length > 0" class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente (email)</th>
+                            <th>Hora entrada</th>
+                            <th>Hora salida</th>
+                            <th>Personas</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let r of reservasHoy">
+                            <td>
+                                <div class="user-name-cell">
+                                    <div class="user-avatar">{{ (r.clienteNombre ||
+                                        r.clienteEmail)?.charAt(0)?.toUpperCase() }}</div>
+                                    <div>
+                                        <div *ngIf="r.clienteNombre" style="font-weight:600;">{{ r.clienteNombre }}
+                                        </div>
+                                        <div style="font-size:0.8rem;opacity:0.7;">{{ r.clienteEmail }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><strong>{{ r.horaEntrada }}</strong></td>
+                            <td class="meta-cell">{{ r.horaSalida }}</td>
+                            <td>👥 {{ r.personas }}</td>
+                            <td>
+                                <span class="status-badge" [ngClass]="getStatusClass(r.estado)">{{ r.estado }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     </div>

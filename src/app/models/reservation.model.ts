@@ -1,6 +1,7 @@
 export interface Reservation {
     id: string;
     clienteEmail: string;
+    clienteNombre?: string;
     fechaReserva: string;
     horaFinReserva: string;
     numeroPersonas: number;

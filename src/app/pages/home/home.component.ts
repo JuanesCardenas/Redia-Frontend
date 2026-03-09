@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { AuthService } from '../../core/services/auth.service';
@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [RouterLink, NavbarComponent, FooterComponent],
+    imports: [NavbarComponent, FooterComponent],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css'
 })
